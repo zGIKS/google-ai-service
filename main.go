@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"google-ai-service/models"
@@ -93,12 +94,17 @@ func main() {
 		v1.POST("/chat", Chat)
 	}
 
+	// Obtener puerto desde variable de entorno o usar 8080 por defecto
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// Imprimir URL de Swagger
-	port := "8080"
 	swaggerURL := fmt.Sprintf("http://localhost:%s/swagger/index.html", port)
 	fmt.Printf("\n🚀 Servidor iniciado en el puerto %s\n", port)
 	fmt.Printf("📚 Documentación Swagger disponible en: %s\n\n", swaggerURL)
 
-	// Iniciar servidor en puerto 8080
+	// Iniciar servidor
 	router.Run(":" + port)
 }
