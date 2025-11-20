@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"google-ai-service/models"
 	"google-ai-service/services"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,24 +22,6 @@ import (
 // @description     API con chatbot integrado usando DeepSeek AI
 // @host            localhost:8080
 // @BasePath        /api/v1
-
-type HelloResponse struct {
-	Message string `json:"message" example:"Hello World!"`
-}
-
-// HelloWorld godoc
-// @Summary      Hello World
-// @Description  Retorna un mensaje de saludo
-// @Tags         hello
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  HelloResponse
-// @Router       /hello [get]
-func HelloWorld(c *gin.Context) {
-	c.JSON(http.StatusOK, HelloResponse{
-		Message: "Hello World!",
-	})
-}
 
 // Chat godoc
 // @Summary      Chat con DeepSeek
@@ -85,6 +69,16 @@ func main() {
 
 	router := gin.Default()
 
+	// Configurar CORS
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // Permite todos los orígenes (puedes especificar dominios específicos)
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
 	// Redirección de raíz a Swagger
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
@@ -96,7 +90,6 @@ func main() {
 	// API v1
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/hello", HelloWorld)
 		v1.POST("/chat", Chat)
 	}
 

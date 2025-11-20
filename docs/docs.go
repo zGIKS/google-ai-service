@@ -60,41 +60,9 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/hello": {
-            "get": {
-                "description": "Retorna un mensaje de saludo",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "hello"
-                ],
-                "summary": "Hello World",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/main.HelloResponse"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
-        "main.HelloResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string",
-                    "example": "Hello World!"
-                }
-            }
-        },
         "models.ChatRequest": {
             "type": "object",
             "required": [

@@ -1,11 +1,5 @@
 basePath: /api/v1
 definitions:
-  main.HelloResponse:
-    properties:
-      message:
-        example: Hello World!
-        type: string
-    type: object
   models.ChatRequest:
     properties:
       message:
@@ -67,19 +61,4 @@ paths:
       summary: Chat con DeepSeek
       tags:
       - chatbot
-  /hello:
-    get:
-      consumes:
-      - application/json
-      description: Retorna un mensaje de saludo
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/main.HelloResponse'
-      summary: Hello World
-      tags:
-      - hello
 swagger: "2.0"
