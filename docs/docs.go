@@ -15,6 +15,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/chat": {
+            "post": {
+                "description": "Envía un mensaje al chatbot de DeepSeek y obtiene una respuesta",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatbot"
+                ],
+                "summary": "Chat con DeepSeek",
+                "parameters": [
+                    {
+                        "description": "Mensaje del usuario",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ChatRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ChatResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/hello": {
             "get": {
                 "description": "Retorna un mensaje de saludo",
@@ -48,6 +94,40 @@ const docTemplate = `{
                     "example": "Hello World!"
                 }
             }
+        },
+        "models.ChatRequest": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Hola, ¿cómo estás?"
+                }
+            }
+        },
+        "models.ChatResponse": {
+            "type": "object",
+            "properties": {
+                "model": {
+                    "type": "string",
+                    "example": "deepseek-chat"
+                },
+                "response": {
+                    "type": "string",
+                    "example": "¡Hola! Estoy bien, gracias por preguntar. ¿En qué puedo ayudarte hoy?"
+                }
+            }
+        },
+        "models.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "mensaje de error"
+                }
+            }
         }
     }
 }`
@@ -58,8 +138,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "API Hello World",
-	Description:      "API simple de ejemplo con Gin y Swagger",
+	Title:            "API Chatbot con DeepSeek",
+	Description:      "API con chatbot integrado usando DeepSeek AI",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

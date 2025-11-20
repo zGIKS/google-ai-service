@@ -6,13 +6,67 @@ definitions:
         example: Hello World!
         type: string
     type: object
+  models.ChatRequest:
+    properties:
+      message:
+        example: Hola, ¿cómo estás?
+        type: string
+    required:
+    - message
+    type: object
+  models.ChatResponse:
+    properties:
+      model:
+        example: deepseek-chat
+        type: string
+      response:
+        example: ¡Hola! Estoy bien, gracias por preguntar. ¿En qué puedo ayudarte
+          hoy?
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      error:
+        example: mensaje de error
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  description: API simple de ejemplo con Gin y Swagger
-  title: API Hello World
+  description: API con chatbot integrado usando DeepSeek AI
+  title: API Chatbot con DeepSeek
   version: "1.0"
 paths:
+  /chat:
+    post:
+      consumes:
+      - application/json
+      description: Envía un mensaje al chatbot de DeepSeek y obtiene una respuesta
+      parameters:
+      - description: Mensaje del usuario
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ChatResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Chat con DeepSeek
+      tags:
+      - chatbot
   /hello:
     get:
       consumes:
