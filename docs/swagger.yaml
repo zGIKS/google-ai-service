@@ -1,0 +1,31 @@
+basePath: /api/v1
+definitions:
+  main.HelloResponse:
+    properties:
+      message:
+        example: Hello World!
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API simple de ejemplo con Gin y Swagger
+  title: API Hello World
+  version: "1.0"
+paths:
+  /hello:
+    get:
+      consumes:
+      - application/json
+      description: Retorna un mensaje de saludo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.HelloResponse'
+      summary: Hello World
+      tags:
+      - hello
+swagger: "2.0"
