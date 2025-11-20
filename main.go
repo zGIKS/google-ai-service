@@ -11,17 +11,16 @@ import (
 	"google-ai-service/models"
 	"google-ai-service/services"
 
+	"github.com/PeterTakahashi/gin-openapi/openapiui"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title           API Chatbot con DeepSeek
 // @version         1.0
 // @description     API con chatbot integrado usando DeepSeek AI
-// @host            localhost:8080
+// @host            localhost:8060
 // @BasePath        /api/v1
 
 // Chat godoc
@@ -80,13 +79,21 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// Redirección de raíz a Swagger
+	// Redirección de raíz a Scalar
 	router.GET("/", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
+		c.Redirect(http.StatusMovedPermanently, "/docs")
 	})
 
-	// Ruta de Swagger UI
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// Servir el archivo OpenAPI JSON
+	router.StaticFile("/openapi.json", "./docs/swagger.json")
+
+	// Ruta de Scalar UI
+	router.GET("/docs/*any", openapiui.WrapHandler(openapiui.Config{
+		SpecURL:      "/openapi.json",
+		SpecFilePath: "./docs/swagger.json",
+		Title:        "API Chatbot con DeepSeek",
+		Theme:        "purple",
+	}))
 
 	// API v1
 	v1 := router.Group("/api/v1")
@@ -100,10 +107,10 @@ func main() {
 		port = "8080"
 	}
 
-	// Imprimir URL de Swagger
-	swaggerURL := fmt.Sprintf("http://localhost:%s/swagger/index.html", port)
+	// Imprimir URL de Scalar
+	docsURL := fmt.Sprintf("http://localhost:%s/docs", port)
 	fmt.Printf("\n🚀 Servidor iniciado en el puerto %s\n", port)
-	fmt.Printf("📚 Documentación Swagger disponible en: %s\n\n", swaggerURL)
+	fmt.Printf("📚 Documentación API (Scalar) disponible en: %s\n\n", docsURL)
 
 	// Iniciar servidor
 	router.Run(":" + port)

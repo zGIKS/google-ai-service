@@ -24,7 +24,7 @@ definitions:
         example: mensaje de error
         type: string
     type: object
-host: localhost:8080
+host: localhost:8060
 info:
   contact: {}
   description: API con chatbot integrado usando DeepSeek AI
